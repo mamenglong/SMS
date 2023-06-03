@@ -10,6 +10,7 @@ import android.util.Log
 
 class SmsReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
+        Log.d("SmsReceiver","onBind:$intent")
         if (SMS_RECEIVED_ACTION == intent.action) {
             val bundle = intent.extras
             if (bundle != null) {
