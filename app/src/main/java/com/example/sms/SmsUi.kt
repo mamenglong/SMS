@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.annotation.StringDef
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,8 +32,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -97,6 +94,9 @@ fun SmsUi(context: MainActivity) {
         msgInputContentArea()
         createButton(text = "设置默认短信应用") {
             SmsUtil.setDefaultSms(context, context.smsResultLauncher)
+        }
+        createButton(text = "删除所有短信") {
+            SmsUtil.deleteAll(context)
         }
         createButton(text = "查询能接受短信的应用") {
             SmsUtil.openSMSappChooser(context)

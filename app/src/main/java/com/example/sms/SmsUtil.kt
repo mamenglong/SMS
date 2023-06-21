@@ -11,6 +11,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import com.example.demo.MainActivity
 
 object SmsUtil {
     fun mockSms(context: Context, item: MsgItem): Boolean {
@@ -30,14 +31,25 @@ object SmsUtil {
         return false
     }
 
+    fun deleteAll(context: MainActivity) {
+        runCatching {
+            val parse = Uri.parse("content://sms/")
+            val cr = context.contentResolver
+            val cmd = cr.delete(parse, null, null)
+            Toast.makeText(context, "删除${cmd}条", Toast.LENGTH_SHORT).show()
+        }.onFailure {
+            Log.d("SmsUtil","deleteAll:${it}")
+        }
+    }
+
     fun setDefaultSms(context: Context, launcher: ActivityResultLauncher<Intent>) {
         val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val roleManager = context.getSystemService(Context.ROLE_SERVICE) as RoleManager
             Log.d("SmsUtil", "isRoleAvailable:${roleManager.isRoleAvailable(RoleManager.ROLE_SMS)}")
-            if (roleManager.isRoleAvailable(RoleManager.ROLE_SMS)){
+            if (roleManager.isRoleAvailable(RoleManager.ROLE_SMS)) {
                 roleManager.createRequestRoleIntent(RoleManager.ROLE_SMS)
-            }else{
-                Toast.makeText(context,"本机不支持设置默认短信",Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "本机不支持设置默认短信", Toast.LENGTH_SHORT).show()
                 return
             }
         } else {
