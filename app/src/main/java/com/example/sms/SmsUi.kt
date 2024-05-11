@@ -5,6 +5,7 @@ import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
 import androidx.annotation.StringDef
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,6 +39,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
+import com.example.Mmkv
 import com.example.demo.MainActivity
 import com.example.demo.createButton
 import com.marosseleng.compose.material3.datetimepickers.date.ui.dialog.DatePickerDialog
@@ -80,12 +84,23 @@ data class MsgItem constructor(
 
 @Composable
 fun SmsUi(context: MainActivity) {
+    var showSmsForwardDialog by remember {
+        mutableStateOf(false)
+    }
     Column(
         modifier =
         Modifier.fillMaxSize()
     ) {
         Text(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    Mmkv.dd_tag = "136手机"
+                    Mmkv.dd_token =
+                        "ded554505a75987690f603906ab81f7a8a48297e87234a684e17ff7dc9fe1ca1"
+                    Mmkv.dd_secret =
+                        "SEC79f1e141503ebfbbba135062edbd05c142b99d0fc9c8af7366753e64eed9bc67"
+                },
             text = "信息模拟器",
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleLarge
@@ -111,6 +126,14 @@ fun SmsUi(context: MainActivity) {
             val uri = Uri.fromParts("package", context.packageName, null)
             val intent = Intent(Intent.ACTION_DELETE, uri)
             context.startActivity(intent)
+        }
+        createButton(text = "短信转发设置") {
+            showSmsForwardDialog = true
+        }
+    }
+    if (showSmsForwardDialog) {
+        SmsForwardDialog() {
+            showSmsForwardDialog = false
         }
     }
 }
@@ -222,7 +245,10 @@ fun msgInputContentArea() {
                                 ).show()
                             }
                         } else {
-                            SmsUtil.setDefaultSms(context,(context as MainActivity).smsResultLauncher)
+                            SmsUtil.setDefaultSms(
+                                context,
+                                (context as MainActivity).smsResultLauncher
+                            )
                         }
                     } else {
                         Toast.makeText(context, "数据不完善", Toast.LENGTH_SHORT).show()
@@ -236,3 +262,59 @@ fun msgInputContentArea() {
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@Preview
+fun SmsForwardDialog(block: () -> Unit = {}) {
+    var token by remember {
+        mutableStateOf(Mmkv.dd_token)
+    }
+    var dd_tag by remember {
+        mutableStateOf(Mmkv.dd_tag)
+    }
+    var secret by remember {
+        mutableStateOf(Mmkv.dd_secret)
+    }
+    AlertDialog(
+        onDismissRequest = {
+
+        },
+        confirmButton = {
+            createButton(text = "确定") {
+                block.invoke()
+            }
+        },
+        dismissButton = {
+            createButton(text = "取消") {
+                block.invoke()
+            }
+        }, title = {
+            Text(text = "设置钉钉机器人参数")
+        }, text = {
+            Column {
+                OutlinedTextField(value = dd_tag, onValueChange = {
+                    dd_tag = it
+                    Mmkv.dd_tag = it
+                }, label = {
+                    Text(text = "钉钉机器人Tag.")
+                },
+                )
+                OutlinedTextField(value = token, onValueChange = {
+                    token = it
+                    Mmkv.dd_token = it
+                }, label = {
+                    Text(text = "钉钉机器人token.")
+                },
+                )
+                OutlinedTextField(value = secret, onValueChange = {
+                    secret = it
+                    Mmkv.dd_secret = it
+                }, label = {
+                    Text(text = "钉钉机器人签名.")
+                })
+            }
+
+        },
+        properties = DialogProperties(dismissOnClickOutside = true)
+    )
+}

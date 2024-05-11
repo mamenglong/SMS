@@ -1,3 +1,4 @@
+val ktor_version: String by project
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -5,12 +6,12 @@ plugins {
 
 android {
     namespace = "com.example.sms"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.sms"
+        applicationId = "com.sms.forward"
         minSdk = 26
-        targetSdk = 31
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -65,16 +66,16 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.0")
+    implementation("androidx.activity:activity-compose:1.8.0")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.8.0")
+    implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     testImplementation("junit:junit:4.13.2")
@@ -87,5 +88,17 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     implementation("com.marosseleng.android:compose-material3-datetime-pickers:0.7.1")
+
+    implementation("io.ktor:ktor-client-android:$ktor_version")
+    implementation ("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-client-json:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+    implementation("io.ktor:ktor-client-serialization:$ktor_version")
+    //ding
+    implementation("com.aliyun:alibaba-dingtalk-service-sdk:2.0.0")
+    //implementation("com.aliyun:dingtalk:2.0.76")
+    implementation("commons-codec:commons-codec:1.15")
+//    implementation ("com.alibaba:fastjson:1.2.68")
+    implementation ("com.tencent:mmkv:1.3.5")
 
 }

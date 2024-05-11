@@ -31,7 +31,7 @@ object SmsUtil {
         return false
     }
 
-    fun deleteAll(context: MainActivity) {
+    fun deleteAll(context: Context) {
         runCatching {
             val parse = Uri.parse("content://sms/")
             val cr = context.contentResolver

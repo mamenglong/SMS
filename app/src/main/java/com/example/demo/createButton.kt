@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun createButton(text: String, block: () -> Unit) {
+fun createButton(text: String, block:() -> Unit) {
     Button(modifier = Modifier
         .fillMaxWidth()
         .wrapContentHeight(),
