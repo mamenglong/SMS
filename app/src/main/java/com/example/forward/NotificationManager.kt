@@ -22,7 +22,7 @@ object NotificationManager {
         val channelId = "my_channel_id"
         val channelName = "短信转发"
         val channelDescription = "转发短信消息"
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val importance = NotificationManager.IMPORTANCE_HIGH
 
         val notificationChannel = NotificationChannel(channelId, channelName, importance)
             .apply {

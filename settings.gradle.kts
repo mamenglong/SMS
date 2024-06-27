@@ -15,3 +15,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "SMS"
 include(":app")
+//include(":flipclock")
+include(":flipclock")
+include(":base")
