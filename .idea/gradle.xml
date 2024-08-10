@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/base" />
             <option value="$PROJECT_DIR$/flipclock" />
+            <option value="$PROJECT_DIR$/sms" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

@@ -124,8 +124,8 @@ fun PortraitScreen(viewModel: MainViewModel = viewModel()) {
                 .fillMaxWidth()
                 .align(Alignment.Center)
         ) {
-            TimeValue(hour,true)
-            TimeValue(minute,true)
+            TimeValue(hour)
+            TimeValue(minute)
             TimeValue(second)
         }
         Text(
