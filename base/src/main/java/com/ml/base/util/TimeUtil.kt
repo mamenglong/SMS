@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter
 
 object TimeUtil {
 
-    fun long2String(timeMillis: Long, pattern: String = "yyyy-MM-dd HH:mm:ss"): String {
+    fun long2String(timeMillis: Long=System.currentTimeMillis(), pattern: String = "yyyy-MM-dd HH:mm:ss"): String {
         val instant = Instant.ofEpochMilli(timeMillis)
         val zone = ZoneId.systemDefault()
         val localDateTime = LocalDateTime.ofInstant(instant, zone)

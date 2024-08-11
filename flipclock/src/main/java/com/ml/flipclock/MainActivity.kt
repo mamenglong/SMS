@@ -48,10 +48,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.ColorUtils
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ml.flipclock.ui.theme.DarkTertiary
 import com.ml.flipclock.ui.theme.FlipClockTheme
 import com.ml.flipclock.vm.MainViewModel
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private val viewModel by viewModels<MainViewModel>()
@@ -67,16 +71,11 @@ class MainActivity : ComponentActivity() {
         window.insetsController?.systemBarsBehavior =
             WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         window.insetsController?.hide(WindowInsets.Type.statusBars())
-    }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED){
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.onResume()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        viewModel.onStop()
+            }
+        }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -98,98 +97,9 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
     Column(modifier = Modifier.background(Color.Black)) {
         Spacer(Modifier.statusBarsPadding())
         Box() {
-            PortraitScreen()
+            FlipClockScreen()
         }
 
     }
 
-}
-
-/**
- * 竖屏
- */
-@Composable
-fun PortraitScreen(viewModel: MainViewModel = viewModel()) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        val hour by remember { viewModel.hour }
-        val minute by remember { viewModel.minute }
-        val second by remember { viewModel.second }
-        val dateStr by remember { viewModel.dateStr }
-        val dayOfWeek by remember { viewModel.dayOfWeek }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Center)
-        ) {
-            TimeValue(hour)
-            TimeValue(minute)
-            TimeValue(second)
-        }
-        Text(
-            dateStr,
-            color = Color.White,
-            fontSize = 20.sp,
-            modifier = Modifier.padding(30.dp)
-        )
-        Text(
-            dayOfWeek,
-            color = Color.White,
-            fontSize = 20.sp,
-            modifier = Modifier
-                .padding(30.dp)
-                .align(Alignment.TopEnd)
-        )
-    }
-}
-
-@OptIn(ExperimentalAnimationApi::class)
-@Composable
-fun RowScope.TimeValue(value: Int,randomColor:Boolean=false) {
-    Box(
-        modifier = Modifier
-            .weight(1f, true)
-            .padding(10.dp)
-            .aspectRatio(1f, true)
-            .border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(10.dp))
-            .clip(RoundedCornerShape(CornerSize(10.dp)))
-            .background(DarkTertiary)
-    ) {
-        AnimatedContent(
-            modifier = Modifier.align(Alignment.Center),
-            targetState = value,
-            transitionSpec = {
-                // Compare the incoming number with the previous number.
-                if (targetState > initialState) {
-                    // If the target number is larger, it slides up and fades in
-                    // while the initial (smaller) number slides up and fades out.
-                    (slideInVertically { height -> height } + fadeIn()).togetherWith(
-                        slideOutVertically { height -> -height } + fadeOut())
-                } else {
-                    // If the target number is smaller, it slides down and fades in
-                    // while the initial number slides down and fades out.
-                    (slideInVertically { height -> -height } + fadeIn()).togetherWith(
-                        slideOutVertically { height -> height } + fadeOut())
-
-                }.using(
-                    // Disable clipping since the faded slide-in/out should
-                    // be displayed out of bounds.
-                    SizeTransform(clip = true)
-                )
-            }) { targetState ->
-
-            Text(
-                text = "%02d".format(targetState),
-                color = if (randomColor) com.ml.base.util.ColorUtils.getRandomColor() else Color.White,
-                fontWeight = FontWeight.W800,
-                fontFamily = FontFamily.Monospace,
-                fontSize = 160.sp,
-            )
-        }
-        androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()){
-
-        }
-    }
 }

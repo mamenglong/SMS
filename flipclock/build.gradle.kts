@@ -9,7 +9,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-
+        minSdk = 30
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -51,4 +51,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    //implementation("io.github.oleksandrbalan:pagecurl:v1.5.1")
 }

@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.text.format.DateUtils
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -13,6 +14,7 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.ml.base.util.TimeUtil
 import com.ml.sms.R
 import com.ml.sms.forward.ForwardSmsService
 import java.time.Duration
@@ -35,7 +37,6 @@ class LoopWorker(context: Context, workerParameters: WorkerParameters) :
         makeStatusNotification("短信定时任务开启", context)
         return kotlin.runCatching {
             ForwardSmsService.start(context)
-
         }.fold(
             onSuccess = {
                 makeStatusNotification("短信定时任务启动成功",context)
@@ -73,7 +74,7 @@ class LoopWorker(context: Context, workerParameters: WorkerParameters) :
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.baseline_timer_24)
             .setContentTitle("WorkRequest Starting")
-            .setContentText(message)
+            .setContentText("${TimeUtil.long2String()}\n$message")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setVibrate(LongArray(0))
 
