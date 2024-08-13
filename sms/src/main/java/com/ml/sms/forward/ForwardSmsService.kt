@@ -14,20 +14,22 @@ class ForwardSmsService : Service() {
             val intent = Intent(context, ForwardSmsService::class.java)
             context.startForegroundService(intent)
         }
+        var isRunning = false
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d("ForwardSmsService","onStartCommand")
-        val notification = NotificationManager.sendCustomNotification(this)
-        SmsReceiver.register(this)
-        SmsObserver.register(this)
-        startForeground(notification.first,notification.second)
+        Log.d("ForwardSmsService","onStartCommand isRunning:$isRunning")
         return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onCreate() {
         super.onCreate()
-        Log.d("ForwardSmsService","onCreate")
+        isRunning = true
+        Log.d("ForwardSmsService","onCreate:$isRunning")
+        val notification = NotificationManager.sendCustomNotification(this)
+        SmsReceiver.register(this)
+        SmsObserver.register(this)
+        startForeground(notification.first, notification.second)
     }
     override fun onBind(intent: Intent?): IBinder? {
         return null

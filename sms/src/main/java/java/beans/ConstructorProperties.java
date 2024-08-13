@@ -1,4 +1,4 @@
-package com.ml.sms.beans;
+package java.beans;
 
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

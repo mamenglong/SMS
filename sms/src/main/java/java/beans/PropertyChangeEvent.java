@@ -1,4 +1,4 @@
-package com.ml.sms.beans;
+package java.beans;
 
 import java.util.EventObject;
 

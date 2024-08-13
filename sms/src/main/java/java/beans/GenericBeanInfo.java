@@ -1,4 +1,4 @@
-package com.ml.sms.beans;
+package java.beans;
 
 public final class GenericBeanInfo implements BeanInfo {
 

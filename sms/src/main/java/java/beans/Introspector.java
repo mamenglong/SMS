@@ -1,4 +1,4 @@
-package com.ml.sms.beans;
+package java.beans;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

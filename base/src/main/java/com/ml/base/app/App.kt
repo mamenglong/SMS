@@ -9,7 +9,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         ServiceLoader.load(AppInit::class.java).forEach {
-            Log.d("Application", "onCreate:AppInit:$it")
+            Log.d("Application", "onCreate:AppInit:$it,${getProcessName()}")
             it.init(this)
         }
     }

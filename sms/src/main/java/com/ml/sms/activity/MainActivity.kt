@@ -56,13 +56,10 @@ class MainActivity : ComponentActivity() {
             }, 11
         )
         startService(Intent(this, HeadlessSmsSendService::class.java))
-        SmsObserver.register(this)
        openSmsForward()
     }
     private fun openSmsForward(){
-        if (NotificationManagerCompat.from(this).areNotificationsEnabled()){
-            ForwardSmsService.start(this)
-        }else{
+        if (!NotificationManagerCompat.from(this).areNotificationsEnabled()){
            com.ml.sms.forward.NotificationManager.gotoNotificationSetting(this)
         }
     }

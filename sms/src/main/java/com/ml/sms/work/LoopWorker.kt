@@ -1,6 +1,7 @@
 package com.ml.sms.work
 
 import android.Manifest
+import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -26,7 +27,7 @@ class LoopWorker(context: Context, workerParameters: WorkerParameters) :
             WorkManager.getInstance(context)
                 .enqueue(
                     PeriodicWorkRequest
-                        .Builder(LoopWorker::class.java, Duration.ofHours(2))
+                        .Builder(LoopWorker::class.java, Duration.ofHours(1))
                         .build()
                 )
         }
