@@ -1,33 +1,33 @@
 package com.ml.sms.work
 
 import android.Manifest
-import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import android.text.format.DateUtils
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.work.PeriodicWorkRequest
+import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.ml.base.util.TimeUtil
 import com.ml.sms.R
 import com.ml.sms.forward.ForwardSmsService
-import java.time.Duration
+import java.util.concurrent.TimeUnit
 
 class LoopWorker(context: Context, workerParameters: WorkerParameters) :
     Worker(context, workerParameters) {
     companion object {
         fun start(context: Context) {
+            Log.d("LoopWorker", "start")
             WorkManager.getInstance(context)
                 .enqueue(
-                    PeriodicWorkRequest
-                        .Builder(LoopWorker::class.java, Duration.ofHours(1))
+                    PeriodicWorkRequestBuilder<LoopWorker>
+                        (1, TimeUnit.HOURS)
                         .build()
                 )
         }
@@ -35,16 +35,17 @@ class LoopWorker(context: Context, workerParameters: WorkerParameters) :
 
     override fun doWork(): Result {
         val context = applicationContext
+        Log.d("LoopWorker", "doWork")
         makeStatusNotification("短信定时任务开启", context)
         return kotlin.runCatching {
             ForwardSmsService.start(context)
         }.fold(
             onSuccess = {
-                makeStatusNotification("短信定时任务启动成功",context)
+                makeStatusNotification("短信定时任务启动成功", context)
                 Result.success()
             },
             onFailure = {
-                makeStatusNotification("短信定时任务启动失败",context)
+                makeStatusNotification("短信定时任务启动失败", context)
                 Result.failure()
             }
         )
